@@ -8,6 +8,7 @@
   ],
   "sideEffects": false,
   "source": "src/index.tsx",
+  "types": "src/index.tsx",
   "scripts": {
     "build": "NODE_ENV=production rollup -c",
     "build-watch": "NODE_ENV=production rollup -c -w",
