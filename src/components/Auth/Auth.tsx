@@ -52,6 +52,7 @@ export interface Props {
   redirectTo?: RedirectTo
   onlyThirdPartyProviders?: boolean
   magicLink?: boolean
+  hideSigninSignupToggle?: boolean
 }
 
 function Auth({
@@ -66,6 +67,7 @@ function Auth({
   redirectTo,
   onlyThirdPartyProviders = false,
   magicLink = false,
+  hideSigninSignupToggle = false,
 }: Props): JSX.Element | null {
   const [authView, setAuthView] = useState(view)
   const [defaultEmail, setDefaultEmail] = useState('')
@@ -118,6 +120,7 @@ function Auth({
             setDefaultPassword={setDefaultPassword}
             redirectTo={redirectTo}
             magicLink={magicLink}
+            hideSigninSignupToggle={hideSigninSignupToggle}
           />
         </Container>
       )
@@ -280,6 +283,7 @@ function EmailAuth({
   supabaseClient,
   redirectTo,
   magicLink,
+  hideSigninSignupToggle,
 }: {
   authView: ViewType
   defaultEmail: string
@@ -291,6 +295,7 @@ function EmailAuth({
   supabaseClient: SupabaseClient
   redirectTo?: RedirectTo
   magicLink?: boolean
+  hideSigninSignupToggle?: boolean
 }) {
   const isMounted = useRef<boolean>(true)
   const [email, setEmail] = useState(defaultEmail)
@@ -422,27 +427,29 @@ function EmailAuth({
               Sign in with magic link
             </Typography.Link>
           )}
-          {authView === VIEWS.SIGN_IN ? (
-            <Typography.Link
-              href="#auth-sign-up"
-              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                e.preventDefault()
-                handleViewChange(VIEWS.SIGN_UP)
-              }}
-            >
-              Don't have an account? Sign up
-            </Typography.Link>
-          ) : (
-            <Typography.Link
-              href="#auth-sign-in"
-              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                e.preventDefault()
-                handleViewChange(VIEWS.SIGN_IN)
-              }}
-            >
-              Do you have an account? Sign in
-            </Typography.Link>
-          )}
+          { !hideSigninSignupToggle &&
+            (authView === VIEWS.SIGN_IN ? (
+              <Typography.Link
+                href="#auth-sign-up"
+                onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                  e.preventDefault()
+                  handleViewChange(VIEWS.SIGN_UP)
+                }}
+              >
+                Don't have an account? Sign up
+              </Typography.Link>
+            ) : (
+              <Typography.Link
+                href="#auth-sign-in"
+                onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                  e.preventDefault()
+                  handleViewChange(VIEWS.SIGN_IN)
+                }}
+              >
+                Do you have an account? Sign in
+              </Typography.Link>
+            ))
+          }
           {message && <Typography.Text>{message}</Typography.Text>}
           {error && <Typography.Text type="danger">{error}</Typography.Text>}
         </Space>
